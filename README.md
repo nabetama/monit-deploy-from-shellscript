@@ -8,6 +8,13 @@
 
 ## PROCESS
 
+### 踏み台の適当な場所にこのディレクトリまるごとコピー
+
+```
+$ rsync -avz --delete --exclude=.git --exclude=README.md . root@<HOST>/
+```
+
+### 踏み台で設定してdeploy.
 
 ```
 $ ./init.sh <Your application process>
