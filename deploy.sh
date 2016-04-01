@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -gt 1 -o $# -eq 0 ]; then
-  echo "Usage: deploy.sh <PROCESS NAME>"
+  echo "Usage: deploy.sh deploy"
   exit 1
 fi
 
