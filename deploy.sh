@@ -5,6 +5,8 @@ if [ $# -gt 1 -o $# -eq 0 ]; then
   exit 1
 fi
 
+WEB_SERVERS=$(cat /etc/web_server_list)
+
 function _deploy_bin() {
   local web_server=$1
   scp ./usr/sbin/monit root@$web_server:/usr/sbin/
@@ -46,8 +48,6 @@ function _deploy_init_d() {
 
 
 function deploy() {
-  WEB_SERVERS=$(cat /etc/web_server_list)
-
   for web_server in $WEB_SERVERS; do
     _deploy_bin $web_server
     _mkdir_etc_monit $web_server
@@ -60,10 +60,20 @@ function deploy() {
 }
 
 function start_monit_all_server() {
-  WEB_SERVERS=$(cat /etc/web_server_list)
-
   for web_server in $WEB_SERVERS; do
     local command="ssh root@$web_server /etc/init.d/monit start"
+    echo "$command"
+    eval "$command"
+  done
+}
+
+function running_check() {
+  for web_server in $WEB_SERVERS; do
+    local command="ssh root@$web_server 'ps auxf | grep monit | grep -v grep'"
+    echo "$command"
+    eval "$command"
+
+    local command="ssh root@$web_server 'tail -n6 /var/log/monit.log'"
     echo "$command"
     eval "$command"
   done
@@ -73,6 +83,7 @@ case "$1" in
     deploy)
         deploy
         start_monit_all_server
+        running_check
         ;;
     *)
         echo $"Usage: $0 {deploy}"
