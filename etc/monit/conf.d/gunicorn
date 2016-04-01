@@ -1,0 +1,8 @@
+check process PROCESS_NAME with pidfile /var/run/gunicorn/PROCESS_NAME.pid
+  start program = "/etc/init.d/PROCESS_NAME start" with timeout 4 seconds
+  stop program = "/etc/init.d/PROCESS_NAME stop" with timeout 4 seconds
+  if failed
+    host localhost
+    port 80
+    protocol http
+  then restart
