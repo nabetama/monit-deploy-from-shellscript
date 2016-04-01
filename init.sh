@@ -8,7 +8,7 @@ fi
 PROCESS_NAME=$1
 
 # BSD, GNUどちらでも動くはず
-sed -i '' -e "s/PROCESS_NAME/$PROCESS_NAME/" ./etc/monit/conf.d/gunicorn
+sed -i '' -e "s/PROCESS_NAME/$PROCESS_NAME/g" ./etc/monit/conf.d/gunicorn
 
 echo "/etc/monit/conf.d/gunicorn を置換したよ!"
 echo "-------------------------------------------------------------------------"

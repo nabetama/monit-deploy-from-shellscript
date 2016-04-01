@@ -59,9 +59,20 @@ function deploy() {
   done
 }
 
+function start_monit_all_server() {
+  WEB_SERVERS=$(cat /etc/web_server_list)
+
+  for web_server in $WEB_SERVERS; do
+    local command="ssh root@$web_server /etc/init.d/monit start"
+    echo "$command"
+    eval "$command"
+  done
+}
+
 case "$1" in
     deploy)
         deploy
+        start_monit_all_server
         ;;
     *)
         echo $"Usage: $0 {deploy}"
